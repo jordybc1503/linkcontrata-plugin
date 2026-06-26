@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-marketplace.json",
+  "name": "linkcontrata",
+  "description": "LinkContrata plugins for AI assistants (Claude Code and compatible). · Plugins de LinkContrata para asistentes de IA (Claude Code y compatibles).",
+  "owner": { "name": "LinkContrata", "url": "https://linkcontrata.lat" },
+  "repository": "https://github.com/jordybc1503/linkcontrata-plugin",
+  "plugins": [
+    {
+      "name": "linkcontrata",
+      "source": "./plugin",
+      "description": "Control LinkContrata from your assistant: create projects, promote them to the marketplace and search Peruvian procurement regulations — with your own auth and permissions. · Controla LinkContrata desde tu asistente: crea proyectos, promuévelos al marketplace y busca normativa peruana — con tu autenticación y permisos.",
+      "keywords": ["contrataciones", "procurement", "peru", "seace", "oece", "marketplace", "regulatorio", "regulatory"]
+    }
+  ]
+}
