@@ -2,12 +2,12 @@
 name: promover-proyecto-al-marketplace
 description: Promote a LinkContrata project to the marketplace (turn it into a public opportunity to receive bids) in one step. Use it when the user asks to publish/promote/expose/list a project to the marketplace, or to "find suppliers/contractors" for one of their projects. · Promueve un proyecto de LinkContrata al marketplace (lo convierte en una oportunidad pública para recibir pujas) en un solo paso. Úsala cuando el usuario pida publicar/promocionar/exponer/sacar al marketplace un proyecto, o "buscar proveedores/contratistas" para un proyecto suyo.
 argument-hint: "[id-o-nombre del proyecto]"
-allowed-tools: mcp__linkcontrata__whoami, mcp__linkcontrata__list_projects, mcp__linkcontrata__get_project, mcp__linkcontrata__promote_project_to_marketplace, mcp__linkcontrata__get_opportunity
+allowed-tools: mcp__plugin_linkcontrata_linkcontrata__whoami, mcp__plugin_linkcontrata_linkcontrata__list_projects, mcp__plugin_linkcontrata_linkcontrata__get_project, mcp__plugin_linkcontrata_linkcontrata__promote_project_to_marketplace, mcp__plugin_linkcontrata_linkcontrata__get_opportunity
 ---
 
 # Promover un proyecto al marketplace
 
-Operación de **un solo paso** respaldada por `mcp__linkcontrata__promote_project_to_marketplace`:
+Operación de **un solo paso** respaldada por `mcp__plugin_linkcontrata_linkcontrata__promote_project_to_marketplace`:
 crea (o reutiliza) el paquete de contratación del proyecto, deriva la oportunidad y la
 **publica** en el marketplace. Es **atómica** e **idempotente** (promover dos veces no
 duplica). Requiere permiso de **lectura y escritura**.

@@ -7,10 +7,10 @@ Promueve un proyecto al marketplace de LinkContrata. Proyecto indicado: **$ARGUM
 
 Sigue la skill `promover-proyecto-al-marketplace`:
 1. Identifica el proyecto (por id; si es un nombre, resuélvelo con
-   `mcp__linkcontrata__list_projects`).
+   `mcp__plugin_linkcontrata_linkcontrata__list_projects`).
 2. Confirma con el usuario qué se publicará (publicar lo hace **visible públicamente** y
    puede tener costo de plan); ofrece `publish: false` para dejar un borrador.
-3. Ejecuta `mcp__linkcontrata__promote_project_to_marketplace` y reporta estado, id y enlace
+3. Ejecuta `mcp__plugin_linkcontrata_linkcontrata__promote_project_to_marketplace` y reporta estado, id y enlace
    público de la oportunidad.
 
 Si recibes `402 plan_limit`, explica que el plan no habilita publicar y ofrece mejorar el

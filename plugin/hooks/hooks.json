@@ -14,7 +14,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "mcp__linkcontrata__.*",
+        "matcher": "mcp__plugin_linkcontrata_linkcontrata__.*",
         "hooks": [
           {
             "type": "command",

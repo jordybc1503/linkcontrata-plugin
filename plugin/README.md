@@ -23,7 +23,7 @@ ChatGPT / other ── MCP connector ────────┤
 
 | Component | Files | Purpose |
 |---|---|---|
-| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): `mcp__linkcontrata__*` tools (read + write), code mode (`search_api` + `execute`) and MCP Apps screens. |
+| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): `mcp__plugin_linkcontrata_linkcontrata__*` tools (read + write), code mode (`search_api` + `execute`) and MCP Apps screens. |
 | **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `autenticacion`. |
 | **Commands** | `commands/*.md` | Shortcuts: `/linkcontrata:estado`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agents** | `agents/*.md` | `operador-linkcontrata` (management, read+write) and `analista-regulatorio` (read-only). |
@@ -86,7 +86,7 @@ que también funciona con otros asistentes compatibles con MCP (p. ej. ChatGPT v
 
 | Componente | Archivos | Para qué |
 |---|---|---|
-| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): herramientas `mcp__linkcontrata__*` (lectura + escritura), code mode (`search_api` + `execute`) y pantallas MCP Apps. |
+| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): herramientas `mcp__plugin_linkcontrata_linkcontrata__*` (lectura + escritura), code mode (`search_api` + `execute`) y pantallas MCP Apps. |
 | **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `autenticacion`. |
 | **Comandos** | `commands/*.md` | Atajos: `/linkcontrata:estado`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agentes** | `agents/*.md` | `operador-linkcontrata` (gestión, lectura+escritura) y `analista-regulatorio` (solo lectura). |
