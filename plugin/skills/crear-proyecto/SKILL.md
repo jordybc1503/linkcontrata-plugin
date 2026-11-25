@@ -8,7 +8,7 @@ allowed-tools: mcp__linkcontrata__whoami, mcp__linkcontrata__list_projects, mcp_
 # Crear un proyecto
 
 Crea un `Projects::Project` en la empresa del usuario vía `mcp__linkcontrata__create_project`.
-Requiere un token con scope **read_write** (si falta, el hook lo avisa; ver la skill
+Requiere una conexión con permiso de **lectura y escritura** (ver la skill
 [[autenticacion]]).
 
 ## Flujo
@@ -26,7 +26,7 @@ Requiere un token con scope **read_write** (si falta, el hook lo avisa; ver la s
 ## Errores frecuentes
 
 - `402 plan_limit` → alcanzó el límite de proyectos de su plan (debe mejorar el plan).
-- `403 insufficient_scope` → su token es de solo lectura.
+- "Permiso insuficiente: esta conexión es de solo lectura" → reconectar aceptando lectura y escritura.
 - `422 validation` → datos inválidos; muestra los `details` del error y corrige.
 
 > No crees proyectos por tu cuenta: confirma nombre y datos clave con el usuario antes de

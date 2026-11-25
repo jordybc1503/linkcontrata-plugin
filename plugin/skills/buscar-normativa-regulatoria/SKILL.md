@@ -8,7 +8,7 @@ allowed-tools: mcp__linkcontrata__search_regulations, mcp__linkcontrata__list_re
 # Buscar normativa regulatoria (RAG)
 
 Búsqueda semántica sobre el corpus regulatorio peruano vía
-`mcp__linkcontrata__search_regulations`. Lectura: funciona con cualquier token.
+`mcp__linkcontrata__search_regulations`. Lectura: funciona con cualquier conexión.
 
 ## Flujo
 

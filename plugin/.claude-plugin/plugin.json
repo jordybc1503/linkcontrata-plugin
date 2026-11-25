@@ -2,11 +2,15 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "linkcontrata",
   "displayName": "LinkContrata — Platform control / Control de plataforma",
-  "version": "0.1.0",
-  "description": "Control LinkContrata from your AI assistant: create projects, promote them to the marketplace and search the Peruvian regulatory documentation — with your own auth and permissions. · Controla LinkContrata desde tu asistente de IA: crea proyectos, promuévelos al marketplace y busca en la documentación regulatoria peruana — con tu propia autenticación y permisos.",
-  "author": { "name": "LinkContrata", "url": "https://linkcontrata.lat" },
+  "version": "0.3.0",
+  "description": "Control LinkContrata from your AI assistant: search Peruvian procurement regulations, review opportunities and projects, create and promote them — signing in with your own LinkContrata account (no token to paste). · Controla LinkContrata desde tu asistente de IA: normativa, oportunidades y proyectos — iniciando sesión con tu cuenta de LinkContrata (sin tokens).",
+  "author": {
+    "name": "LinkContrata",
+    "url": "https://linkcontrata.lat"
+  },
   "homepage": "https://linkcontrata.lat",
-  "repository": "https://github.com/jordybc1503/linkcontrata-plugin",
+  "privacyPolicyUrl": "https://linkcontrata.lat/politica-de-privacidad",
+  "repository": "https://github.com/jordybc1503/LinkContratav2",
   "license": "MIT",
   "keywords": [
     "linkcontrata",
@@ -20,29 +24,10 @@
     "regulatory",
     "mcp"
   ],
-  "userConfig": {
-    "linkcontrata_token": {
-      "type": "string",
-      "title": "LinkContrata API token / Token de API de LinkContrata",
-      "description": "Personal token (lct_…). Generate it in LinkContrata → Settings → API Tokens. Use scope read_write to create projects / promote to the marketplace; read for read-only. Stored encrypted (keychain), never in plaintext. · Token personal (lct_…). Genéralo en LinkContrata → Configuración → Tokens de API. Usa scope read_write para crear proyectos / promover al marketplace; read para solo lectura. Se guarda cifrado (keychain), nunca en texto plano.",
-      "required": true,
-      "sensitive": true
-    },
-    "linkcontrata_url": {
-      "type": "string",
-      "title": "LinkContrata URL / URL de LinkContrata",
-      "description": "Instance base URL. Leave the default unless you self-host. · Base URL de la instancia. Déjalo por defecto salvo entornos propios.",
-      "default": "https://linkcontrata.lat"
-    }
-  },
   "mcpServers": {
     "linkcontrata": {
-      "command": "npx",
-      "args": ["-y", "@linkcontrata/mcp"],
-      "env": {
-        "LINKCONTRATA_TOKEN": "${user_config.linkcontrata_token}",
-        "LINKCONTRATA_URL": "${user_config.linkcontrata_url}"
-      }
+      "type": "http",
+      "url": "https://linkcontrata.lat/mcp"
     }
   }
 }
