@@ -2,12 +2,12 @@
 name: crear-proyecto
 description: Create a project in LinkContrata from the assistant. Use it when the user asks to create/register/add a project (work, contract, initiative) in their LinkContrata account. · Crea un proyecto en LinkContrata desde el asistente. Úsala cuando el usuario pida crear/registrar/dar de alta un proyecto (obra, contrato, iniciativa) en su cuenta de LinkContrata.
 argument-hint: "[nombre del proyecto]"
-allowed-tools: mcp__linkcontrata__whoami, mcp__linkcontrata__list_projects, mcp__linkcontrata__create_project
+allowed-tools: mcp__plugin_linkcontrata_linkcontrata__whoami, mcp__plugin_linkcontrata_linkcontrata__list_projects, mcp__plugin_linkcontrata_linkcontrata__create_project
 ---
 
 # Crear un proyecto
 
-Crea un `Projects::Project` en la empresa del usuario vía `mcp__linkcontrata__create_project`.
+Crea un `Projects::Project` en la empresa del usuario vía `mcp__plugin_linkcontrata_linkcontrata__create_project`.
 Requiere una conexión con permiso de **lectura y escritura** (ver la skill
 [[autenticacion]]).
 

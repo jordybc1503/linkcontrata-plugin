@@ -32,6 +32,6 @@ El usuario ve y desconecta sus asistentes en LinkContrata → **Configuración �
 
 ## Verificación rápida
 
-Usa `whoami` (`mcp__linkcontrata__whoami`) para confirmar identidad, empresa, plan y capacidades antes de
+Usa `whoami` (`mcp__plugin_linkcontrata_linkcontrata__whoami`) para confirmar identidad, empresa, plan y capacidades antes de
 operar. Para scripts propios fuera del asistente siguen existiendo los tokens de API (`lct_…`) en
 Configuración → Asistentes de IA → Tokens de API.

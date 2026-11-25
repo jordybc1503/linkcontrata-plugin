@@ -2,13 +2,13 @@
 name: buscar-normativa-regulatoria
 description: Search the Peruvian procurement regulatory documentation (gob.pe corpus) with semantic search. Use it when the user asks about regulations, laws, rules, deadlines, OECE/SEACE procedures, opinions or rulings, or how to proceed under public-procurement law. · Busca en la documentación regulatoria peruana de contrataciones (corpus gob.pe) con búsqueda semántica. Úsala cuando el usuario pregunte por normas, leyes, reglamentos, plazos, procedimientos OECE/SEACE, opiniones o pronunciamientos, o cómo proceder según la normativa de contratación pública.
 argument-hint: "[consulta en lenguaje natural]"
-allowed-tools: mcp__linkcontrata__search_regulations, mcp__linkcontrata__list_regulatory_documents, mcp__linkcontrata__get_regulatory_document
+allowed-tools: mcp__plugin_linkcontrata_linkcontrata__search_regulations, mcp__plugin_linkcontrata_linkcontrata__list_regulatory_documents, mcp__plugin_linkcontrata_linkcontrata__get_regulatory_document
 ---
 
 # Buscar normativa regulatoria (RAG)
 
 Búsqueda semántica sobre el corpus regulatorio peruano vía
-`mcp__linkcontrata__search_regulations`. Lectura: funciona con cualquier conexión.
+`mcp__plugin_linkcontrata_linkcontrata__search_regulations`. Lectura: funciona con cualquier conexión.
 
 ## Flujo
 
