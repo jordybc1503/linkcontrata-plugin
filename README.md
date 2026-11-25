@@ -1,13 +1,12 @@
 # LinkContrata — Claude Code plugin
 
 Control [LinkContrata](https://linkcontrata.lat) from your AI assistant: search Peruvian
-procurement regulations, review projects, and create/publish marketplace opportunities —
-all with **your own authentication and permissions**.
+procurement regulations, review opportunities and projects, and create/publish marketplace
+opportunities — **signing in with your own LinkContrata account** (no token to paste).
 
 This is the **public distribution** of the LinkContrata plugin. It contains no private
-code: just the plugin manifest, skills, commands, agents and hooks. The actual work is
-done by the public MCP server [`@linkcontrata/mcp`](https://www.npmjs.com/package/@linkcontrata/mcp),
-which calls LinkContrata's API with the personal token you provide.
+code: just the plugin manifest, skills, commands, agents and hooks. The work is done by
+LinkContrata's remote MCP server, `https://linkcontrata.lat/mcp`.
 
 ## Install (Claude Code)
 
@@ -16,39 +15,39 @@ which calls LinkContrata's API with the personal token you provide.
 /plugin install linkcontrata@linkcontrata
 ```
 
-Claude Code will ask for your **LinkContrata API token** (generate it at LinkContrata →
-*Configuración → Tokens de API*) and the instance URL (default `https://linkcontrata.lat`).
-Then ask in natural language: *"busca normas sobre plazos de apelación de la buena pro"* or
-*"promueve mi proyecto 12 al marketplace"*.
+Then run `/mcp`, pick **linkcontrata** → **Authenticate**, sign in with your LinkContrata
+account in the browser and press **Autorizar** (read-only or read & write). Ask in natural
+language: *"busca normas sobre plazos de apelación de la buena pro"* or *"promueve mi
+proyecto 12 al marketplace"*.
+
+Already installed? Update with `/plugin marketplace update linkcontrata` and reinstall.
 
 ## Use without the plugin (any MCP client)
 
-Don't use Claude Code? The MCP server is public on npm and works with Claude Desktop,
-ChatGPT and any MCP-compatible client. Add this to your MCP config:
+Add a remote MCP connector with this URL and sign in when asked:
 
-```json
-{
-  "mcpServers": {
-    "linkcontrata": {
-      "command": "npx",
-      "args": ["-y", "@linkcontrata/mcp"],
-      "env": {
-        "LINKCONTRATA_TOKEN": "lct_your_token_here",
-        "LINKCONTRATA_URL": "https://linkcontrata.lat"
-      }
-    }
-  }
-}
 ```
+https://linkcontrata.lat/mcp
+```
+
+- **Claude (web / desktop):** add a custom connector with the URL.
+- **Claude Code:** `claude mcp add --transport http linkcontrata https://linkcontrata.lat/mcp`
+- **ChatGPT and other MCP clients:** add a remote MCP server with the URL.
+
+Supported assistants also show interactive screens (MCP Apps) for opportunities, regulations,
+your dashboard and projects, and can run multi-step queries with code mode (`search_api` +
+`execute`).
 
 Full step-by-step guide (Spanish): https://linkcontrata.lat/ayuda/asistente-ia-mcp-y-api
 
 ## Security
 
-The token travels as `Authorization: Bearer …`; LinkContrata stores only its SHA-256 hash.
-The assistant can only do what you could do on the web — every call is scoped to your
-company and your role/plan. A read-only token cannot create or publish anything. Revoke a
-token anytime from *Configuración → Tokens de API*.
+Sign-in uses OAuth: your password never reaches the assistant. The assistant can only do
+what you could do on the web — every call is scoped to your company and your role/plan, and
+a read-only connection cannot create or publish anything. See and disconnect connected
+assistants anytime in LinkContrata → *Configuración → Asistentes de IA*.
+
+The npm package `@linkcontrata/mcp` (stdio + personal token) is deprecated.
 
 ---
 

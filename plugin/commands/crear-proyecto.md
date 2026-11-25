@@ -1,5 +1,5 @@
 ---
-description: Create a project in LinkContrata (requires a read_write token). · Crea un proyecto en LinkContrata (requiere token read_write).
+description: Create a project in LinkContrata (requires read & write permission). · Crea un proyecto en LinkContrata (requiere permiso de lectura y escritura).
 argument-hint: "[nombre del proyecto]"
 ---
 

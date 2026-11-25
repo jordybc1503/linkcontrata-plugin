@@ -6,8 +6,8 @@ documentation** — all with **your authentication** and **your permissions** (t
 platform enforces the same per-company isolation and the same roles/plan as the web app).
 
 It is LinkContrata's **agentic control layer**: it bundles skills + commands + agents +
-hooks around the vendor-neutral **MCP server** (`@linkcontrata/mcp`), which also works
-with other MCP-compatible assistants (e.g. ChatGPT via an MCP connector).
+hooks around LinkContrata's vendor-neutral remote **MCP server** (`https://linkcontrata.lat/mcp`), which
+also works with other MCP-compatible assistants (e.g. ChatGPT via an MCP connector).
 
 *(Versión en español más abajo — [ver §Español](#español).)*
 
@@ -15,50 +15,42 @@ with other MCP-compatible assistants (e.g. ChatGPT via an MCP connector).
 Claude Code  ── "linkcontrata" plugin ──┐
 ChatGPT / other ── MCP connector ────────┤
                                          ▼
-                       MCP server  ──Bearer lct_…──►  Rails /api/v1/*  (Pundit + tenant)
-                       (@linkcontrata/mcp)
+         https://linkcontrata.lat/mcp  ──OAuth (sign in)──►  LinkContrata API /api/v1/*  (permissions + tenant)
+         (tools · code mode · MCP Apps)
 ```
 
 ## What's inside
 
 | Component | Files | Purpose |
 |---|---|---|
-| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | Exposes 20 `mcp__linkcontrata__*` tools (read + write). |
+| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): `mcp__linkcontrata__*` tools (read + write), code mode (`search_api` + `execute`) and MCP Apps screens. |
 | **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `autenticacion`. |
 | **Commands** | `commands/*.md` | Shortcuts: `/linkcontrata:estado`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agents** | `agents/*.md` | `operador-linkcontrata` (management, read+write) and `analista-regulatorio` (read-only). |
-| **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Auth (PreToolUse requires a token on writes), audit (PostToolUse logs usage) and session context (SessionStart). |
+| **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Audit (PostToolUse logs usage) and session context (SessionStart). |
 
-## Authentication (required)
+## Authentication: sign in with LinkContrata
 
-The plugin **asks for the token at install time** (a sensitive `userConfig` field, stored
-in the keychain):
-
-- **LinkContrata API token** — generate it in LinkContrata → *Settings → API Tokens*.
-  Scope **`read`** for read-only; **`read_write`** to create projects / promote to the
-  marketplace / submit bids.
-- **LinkContrata URL** — defaults to `https://linkcontrata.lat`.
-
-In addition, the `require-auth.sh` hook **blocks any write** when there is no token, and
-the Rails API rejects missing/invalid tokens (401) or read-only tokens on mutations
-(403). Three layers of defense. Error troubleshooting: the `autenticacion` skill.
+No token to paste. The plugin connects to the remote MCP server `https://linkcontrata.lat/mcp`, which uses
+OAuth: the first time, run `/mcp` → **linkcontrata** → **Authenticate**, sign in with your LinkContrata
+account in the browser and press **Autorizar**. You choose read-only or read & write on that screen; the
+session renews itself. The API enforces your role, plan and company isolation exactly like the web, and you
+can disconnect the assistant any time in LinkContrata → *Settings → Asistentes de IA*. Error
+troubleshooting: the `autenticacion` skill.
 
 ## Installation
 
 ```bash
 # Add this repo as a plugin marketplace, then install
-/plugin marketplace add jordybc1503/LinkContratav2
+/plugin marketplace add jordybc1503/linkcontrata-plugin
 /plugin install linkcontrata@linkcontrata
 ```
 
-Claude Code will ask for the token and URL. Reload (`/reload-plugins`) and try:
-*"search regulations about appeal deadlines for the award"* or *"promote my project 12 to
-the marketplace"*.
+Reload (`/reload-plugins`), authenticate with `/mcp`, and try: *"search regulations about appeal deadlines
+for the award"* or *"promote my project 12 to the marketplace"*.
 
-> The plugin's `mcpServers` launches the server with `npx -y @linkcontrata/mcp`, which is
-> **published on npm** — no extra setup. (To run a local build instead, point the
-> `mcpServers` command at `node <abs-path>/LinkContratav2/mcp/dist/index.js` after running
-> `npm install && npm run build` in `mcp/`.)
+> Without the plugin: `claude mcp add --transport http linkcontrata https://linkcontrata.lat/mcp`. The npm
+> package `@linkcontrata/mcp` (stdio + `LINKCONTRATA_TOKEN`) is deprecated in favour of this remote server.
 
 ## Marketplace: two different things
 
@@ -71,7 +63,7 @@ the marketplace"*.
 ## Philosophy (toward microservices)
 
 This feature is the **start** of moving LinkContrata toward a more service-oriented
-architecture under an agentic philosophy: the Rails monolith exposes its capability as a
+architecture under an agentic philosophy: the LinkContrata backend exposes its capability as a
 **versioned API** (`/api/v1/*`), the **MCP server** translates it into vendor-neutral
 tools, and this **plugin** is the control plane for agents. As parts of the monolith are
 extracted into services, the contract toward agents (the MCP tools) can stay stable while
@@ -87,48 +79,41 @@ peruana — todo con **tu autenticación** y **tus permisos** (la plataforma apl
 aislamiento por empresa y los mismos roles/plan que la web).
 
 Es la **capa de control agéntica** de LinkContrata: empaqueta skills + comandos + agentes +
-hooks alrededor del **servidor MCP** vendor-neutral (`@linkcontrata/mcp`), que también
-funciona con otros asistentes compatibles con MCP (p. ej. ChatGPT vía conector MCP).
+hooks alrededor del **servidor MCP** remoto y vendor-neutral de LinkContrata (`https://linkcontrata.lat/mcp`),
+que también funciona con otros asistentes compatibles con MCP (p. ej. ChatGPT vía conector MCP).
 
 ### Qué trae
 
 | Componente | Archivos | Para qué |
 |---|---|---|
-| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | Expone 20 herramientas `mcp__linkcontrata__*` (lectura + escritura). |
+| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): herramientas `mcp__linkcontrata__*` (lectura + escritura), code mode (`search_api` + `execute`) y pantallas MCP Apps. |
 | **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `autenticacion`. |
 | **Comandos** | `commands/*.md` | Atajos: `/linkcontrata:estado`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agentes** | `agents/*.md` | `operador-linkcontrata` (gestión, lectura+escritura) y `analista-regulatorio` (solo lectura). |
-| **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Autenticación (PreToolUse exige token en escrituras), auditoría (PostToolUse registra el uso) y contexto de sesión (SessionStart). |
+| **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Auditoría (PostToolUse registra el uso) y contexto de sesión (SessionStart). |
 
-### Autenticación (obligatoria)
+### Autenticación: inicia sesión con LinkContrata
 
-El plugin **pide el token al instalarse** (campo `userConfig` sensible, guardado en keychain):
-
-- **Token de API de LinkContrata** — genéralo en LinkContrata → *Configuración → Tokens de
-  API*. Scope **`read`** para solo lectura; **`read_write`** para crear proyectos / promover
-  al marketplace / pujar.
-- **URL de LinkContrata** — default `https://linkcontrata.lat`.
-
-Además, el hook `require-auth.sh` **bloquea cualquier escritura** si no hay token, y el API
-de Rails rechaza tokens ausentes/inválidos (401) o de solo lectura en mutaciones (403). Tres
-capas de defensa. Diagnóstico de errores: skill `autenticacion`.
+Sin tokens que copiar. El plugin se conecta al servidor MCP remoto `https://linkcontrata.lat/mcp`, que usa
+OAuth: la primera vez ejecuta `/mcp` → **linkcontrata** → **Authenticate**, inicia sesión con tu cuenta de
+LinkContrata en el navegador y pulsa **Autorizar**. En esa pantalla eliges solo lectura o lectura y escritura;
+la sesión se renueva sola. El API aplica tu rol, tu plan y el aislamiento por empresa igual que la web, y
+puedes desconectar el asistente cuando quieras en LinkContrata → *Configuración → Asistentes de IA*.
+Diagnóstico de errores: la skill `autenticacion`.
 
 ### Instalación
 
 ```bash
 # Añade este repo como marketplace de plugins y luego instala
-/plugin marketplace add jordybc1503/LinkContratav2
+/plugin marketplace add jordybc1503/linkcontrata-plugin
 /plugin install linkcontrata@linkcontrata
 ```
 
-Claude Code te pedirá el token y la URL. Recarga (`/reload-plugins`) y prueba:
-*"busca normas sobre plazos de apelación de la buena pro"* o *"promueve mi proyecto 12 al
-marketplace"*.
+Recarga (`/reload-plugins`), autentícate con `/mcp` y prueba: *"busca normas sobre plazos de apelación de la
+buena pro"* o *"promueve mi proyecto 12 al marketplace"*.
 
-> El `mcpServers` del plugin lanza el servidor con `npx -y @linkcontrata/mcp`, que ya está
-> **publicado en npm** — sin pasos extra. (Para usar un build local, apunta el comando a
-> `node <ruta-abs>/LinkContratav2/mcp/dist/index.js` tras correr `npm install && npm run
-> build` en `mcp/`.)
+> Sin el plugin: `claude mcp add --transport http linkcontrata https://linkcontrata.lat/mcp`. El paquete npm
+> `@linkcontrata/mcp` (stdio + `LINKCONTRATA_TOKEN`) queda obsoleto en favor de este servidor remoto.
 
 ### Marketplace: dos cosas distintas
 
@@ -141,7 +126,7 @@ marketplace"*.
 ### Filosofía (hacia microservicios)
 
 Esta feature es el **inicio** de mover LinkContrata hacia una arquitectura más orientada a
-servicios bajo una filosofía agéntica: el monolito Rails expone su capacidad como una **API
+servicios bajo una filosofía agéntica: el backend de LinkContrata expone su capacidad como una **API
 versionada** (`/api/v1/*`), el **MCP server** la traduce a herramientas vendor-neutral, y
 este **plugin** es el plano de control para agentes. A medida que partes del monolito se
 extraigan a servicios, el contrato hacia los agentes (las herramientas MCP) puede

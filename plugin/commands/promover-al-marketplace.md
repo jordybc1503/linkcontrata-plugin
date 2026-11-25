@@ -1,5 +1,5 @@
 ---
-description: Promote a project to the LinkContrata marketplace (publishes it as an opportunity). Requires a read_write token. · Promueve un proyecto al marketplace de LinkContrata (lo publica como oportunidad). Requiere token read_write.
+description: Promote a project to the LinkContrata marketplace (publishes it as an opportunity). Requires read & write permission. · Promueve un proyecto al marketplace de LinkContrata (lo publica como oportunidad). Requiere permiso de lectura y escritura.
 argument-hint: "[id-o-nombre del proyecto]"
 ---
 

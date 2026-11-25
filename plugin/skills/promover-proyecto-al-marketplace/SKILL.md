@@ -10,7 +10,7 @@ allowed-tools: mcp__linkcontrata__whoami, mcp__linkcontrata__list_projects, mcp_
 Operación de **un solo paso** respaldada por `mcp__linkcontrata__promote_project_to_marketplace`:
 crea (o reutiliza) el paquete de contratación del proyecto, deriva la oportunidad y la
 **publica** en el marketplace. Es **atómica** e **idempotente** (promover dos veces no
-duplica). Requiere token **read_write**.
+duplica). Requiere permiso de **lectura y escritura**.
 
 > Marketplace aquí = el **marketplace de negocio de LinkContrata** (donde otras empresas ven
 > la oportunidad y postulan), NO el marketplace de plugins de Claude Code.
@@ -40,7 +40,7 @@ duplica). Requiere token **read_write**.
   marketplace**. Ofrécele dos caminos: (a) mejorar el plan; (b) reintentar con
   `publish: false` para dejar la oportunidad en **borrador** (no consume el gate de
   publicación) y publicarla luego al mejorar el plan.
-- `403 insufficient_scope` → token de solo lectura; necesita read_write.
+- "Permiso insuficiente: esta conexión es de solo lectura" → reconectar aceptando lectura y escritura.
 - `402` por **cuota mensual de paquetes** → alcanzó el límite de paquetes del mes.
 - `422 validation` → muestra `details` y corrige (p. ej. `deadline_at` debe ser futura).
 

@@ -6,19 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-context.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "mcp__linkcontrata__(create_project|promote_project_to_marketplace|create_opportunity|publish_opportunity|submit_bid|send_contact_message)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/require-auth.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/session-context.sh\"",
             "timeout": 10
           }
         ]
@@ -30,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/audit-log.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/audit-log.sh\"",
             "timeout": 10
           }
         ]
