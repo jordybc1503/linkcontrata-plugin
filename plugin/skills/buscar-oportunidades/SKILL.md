@@ -37,8 +37,11 @@ empresa elija en la web, abre un **radar** con la skill `trabajar-flujo` (`start
    `deadline_at`: en un procedimiento de selección esa es la fecha de convocatoria.
    - Abierto para postular: antes del fin de «Registro de participantes» (la empresa debe registrarse en el SEACE).
    - Registro cerrado y «Presentación de ofertas» sin terminar: solo si la empresa ya se registró; márcalo así.
+   - Subasta inversa electrónica: el registro y la oferta van en la misma etapa, «Registro de participantes»; su fin es
+     el cierre para postular. El «Periodo de lances» viene después y solo participan los que ya presentaron oferta.
    - Presentación cerrada (evaluación, buena pro): ya no se puede postular; descártalo.
-   - Contratación Menor (en `nombre_etapa`: «ETAPA DE CONSULTAS» / «ETAPA DE COTIZACIÓN», estándar «Otro»): cotiza
+   - Contratación Menor (en `nombre_etapa`: «ETAPA DE CONSULTAS» / «ETAPA DE COTIZACIÓN», estándar «Consultas» /
+     «Cotización»): cotiza
      hasta el fin de «ETAPA DE COTIZACIÓN»; si esa etapa ya está `cerrada`, descártalo.
    - Solo «Invitación», sin Registro ni etapas de contratación menor (contratación directa, adjudicación abreviada):
      solo para invitados; descártalo.
