@@ -11,6 +11,13 @@ Las oportunidades **privadas** las publica una empresa en LinkContrata y **la of
 empresa la recibe y la compara con las demás. (Si es un proceso **público** del Estado — OECE/SEACE, códigos como
 `CM-…`, `LP-…` — usa la skill `preparar-propuesta`: esa oferta se presenta en el SEACE.)
 
+## Si hay un flujo con IA
+
+Si el usuario tiene (o quiere) un flujo con IA para esta oportunidad, usa la skill `trabajar-flujo` (`start_flow` para
+abrirlo): cada paso queda registrado con su informe y sus fuentes, y las decisiones las toma la empresa en la web.
+Dentro de un flujo no llames a `submit_bid` (el servidor no lo impide): la postulación la envía una persona con
+**Postular**.
+
 ## Flujo
 
 1. **Identifica la oportunidad.** Id o URL `…/marketplace/oportunidades/12-…` (el id es el número inicial). Si el

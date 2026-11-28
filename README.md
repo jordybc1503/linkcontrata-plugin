@@ -25,6 +25,10 @@ an eligibility check against the regulations and draft quotation/letter/declarat
 SEACE**; for a private opportunity published in LinkContrata it helps you price it and sends it there with your
 confirmation.
 
+**Flows with AI** (`/linkcontrata:trabajar-flujo`): find opportunities, prepare an offer or publish an
+opportunity as a fixed list of steps — the assistant reports each AI step with its sources, and **only a person
+signed in on the web decides** (apply, approve, send, publish, award). Guide: https://linkcontrata.lat/ayuda/flujos-con-ia
+
 Already installed? Update with `/plugin marketplace update linkcontrata` and reinstall.
 
 ## Use without the plugin (any MCP client)

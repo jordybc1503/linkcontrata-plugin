@@ -17,5 +17,8 @@ Prepara una oferta para: **$ARGUMENTS**.
    - Si no está claro (solo un nombre), busca con `mcp__plugin_linkcontrata_linkcontrata__list_opportunities` y
      pregunta cuál es.
 2. Empieza diciendo cuánto falta para el cierre. Nunca inventes datos: lo desconocido va como **[completar]**.
+3. Ofrece abrir un **flujo con IA** (`mcp__plugin_linkcontrata_linkcontrata__start_flow`, `public_offer` con
+   `public_opportunity_id` o `private_offer` con `opportunity_id`) para que cada paso quede registrado y la empresa
+   decida en la web; si acepta, sigue la skill `trabajar-flujo` en vez de las anteriores.
 
 Responde en el idioma del usuario. / Reply in the user's language.
