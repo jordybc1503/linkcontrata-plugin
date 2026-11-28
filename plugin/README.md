@@ -16,14 +16,14 @@ Claude Code  ── "linkcontrata" plugin ──┐
 ChatGPT / other ── MCP connector ────────┤
                                          ▼
          https://linkcontrata.lat/mcp  ──OAuth (sign in)──►  LinkContrata API /api/v1/*  (permissions + tenant)
-         (tools · code mode · MCP Apps)
+         (5 tools → commands · MCP Apps)
 ```
 
 ## What's inside
 
 | Component | Files | Purpose |
 |---|---|---|
-| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): `mcp__plugin_linkcontrata_linkcontrata__*` tools (read + write), code mode (`search_api` + `execute`) and MCP Apps screens. |
+| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): five tools — `list_commands`, `describe_command`, `batch` (reads), `show_command` (MCP Apps screens) and `execute` (writes) — that run every LinkContrata operation as a **command**. |
 | **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `preparar-propuesta` (public offers), `postular-oportunidad-privada` (private offers), `trabajar-flujo` (AI flows), `autenticacion`. |
 | **Commands** | `commands/*.md` | Shortcuts: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:trabajar-flujo`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agents** | `agents/*.md` | `operador-linkcontrata` (management, read+write) and `analista-regulatorio` (read-only). |
@@ -72,8 +72,8 @@ private opportunity, publish an opportunity). The AI does its steps and leaves a
 the company steps in the web (go / no-go, approve, mark as sent or published, award). Say *"Trabaja el flujo 14"* or
 run `/linkcontrata:trabajar-flujo 14`: skill `trabajar-flujo` reads the flow (`get_flow`), does the current AI step,
 reports it (`submit_flow_step`), asks the company when something is unclear (`ask_company`) and stops when it is the
-company's turn. No tool can decide a company step (the server refuses it from a token). The server does not stop the marketplace
-tools (send a bid, publish or promote an opportunity) outside a flow; the skill tells the assistant not to use them
+company's turn. No command can decide a company step (the server refuses it from a token). The server does not stop the marketplace
+commands (send a bid, publish or promote an opportunity) outside a flow; the skill tells the assistant not to use them
 while working one — a person does those on the web.
 Guide: https://linkcontrata.lat/ayuda/flujos-con-ia
 
@@ -83,15 +83,15 @@ Guide: https://linkcontrata.lat/ayuda/flujos-con-ia
   how you distribute/install THIS plugin.
 - **LinkContrata marketplace** = the business marketplace where opportunities are
   published and companies bid. "Promote to the marketplace" refers to **this one** (the
-  `promote_project_to_marketplace` tool).
+  `promote_project_to_marketplace` command).
 
 ## Philosophy (toward microservices)
 
 This feature is the **start** of moving LinkContrata toward a more service-oriented
 architecture under an agentic philosophy: the LinkContrata backend exposes its capability as a
-**versioned API** (`/api/v1/*`), the **MCP server** translates it into vendor-neutral
+**versioned API** (`/api/v1/*`), the **MCP server** translates it into commands behind five vendor-neutral
 tools, and this **plugin** is the control plane for agents. As parts of the monolith are
-extracted into services, the contract toward agents (the MCP tools) can stay stable while
+extracted into services, the contract toward agents (the MCP commands) can stay stable while
 the backend evolves behind it. It does **not** migrate anything yet: it lays the seam.
 
 ---
@@ -111,7 +111,7 @@ que también funciona con otros asistentes compatibles con MCP (p. ej. ChatGPT v
 
 | Componente | Archivos | Para qué |
 |---|---|---|
-| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): herramientas `mcp__plugin_linkcontrata_linkcontrata__*` (lectura + escritura), code mode (`search_api` + `execute`) y pantallas MCP Apps. |
+| **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): cinco herramientas — `list_commands`, `describe_command`, `batch` (lecturas), `show_command` (pantallas MCP Apps) y `execute` (escrituras) — que ejecutan cada operación de LinkContrata como un **comando**. |
 | **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `preparar-propuesta` (ofertas públicas), `postular-oportunidad-privada` (ofertas privadas), `trabajar-flujo` (flujos con IA), `autenticacion`. |
 | **Comandos** | `commands/*.md` | Atajos: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:trabajar-flujo`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agentes** | `agents/*.md` | `operador-linkcontrata` (gestión, lectura+escritura) y `analista-regulatorio` (solo lectura). |
@@ -160,8 +160,8 @@ una oportunidad privada, publicar una oportunidad). La IA hace sus pasos y deja 
 decide los pasos de la empresa en la web (postular o no, aprobar, marcar enviado o publicado, adjudicar). Di
 *«Trabaja el flujo 14»* o usa `/linkcontrata:trabajar-flujo 14`: la skill `trabajar-flujo` lee el flujo (`get_flow`),
 hace el paso actual de la IA, lo reporta (`submit_flow_step`), pregunta a la empresa si algo no está claro
-(`ask_company`) y se detiene cuando le toca a la empresa. Ninguna herramienta puede decidir un paso de la empresa (el
-servidor lo rechaza desde un token). El servidor no impide usar las herramientas del marketplace (enviar una postulación,
+(`ask_company`) y se detiene cuando le toca a la empresa. Ningún comando puede decidir un paso de la empresa (el
+servidor lo rechaza desde un token). El servidor no impide usar los comandos del marketplace (enviar una postulación,
 publicar o promover una oportunidad) por fuera del flujo; la skill le indica al asistente que no lo haga mientras
 trabaja uno: eso lo hace una persona en la web. Guía: https://linkcontrata.lat/ayuda/flujos-con-ia
 
@@ -170,15 +170,15 @@ trabaja uno: eso lo hace una persona en la web. Guía: https://linkcontrata.lat/
 - **Marketplace de Claude Code** = el catálogo de plugins (`.claude-plugin/marketplace.json`),
   cómo distribuyes/instalas ESTE plugin.
 - **Marketplace de LinkContrata** = el marketplace de negocio donde se publican oportunidades
-  y las empresas postulan. "Promover al marketplace" se refiere a **este** (la herramienta
+  y las empresas postulan. "Promover al marketplace" se refiere a **este** (el comando
   `promote_project_to_marketplace`).
 
 ### Filosofía (hacia microservicios)
 
 Esta feature es el **inicio** de mover LinkContrata hacia una arquitectura más orientada a
 servicios bajo una filosofía agéntica: el backend de LinkContrata expone su capacidad como una **API
-versionada** (`/api/v1/*`), el **MCP server** la traduce a herramientas vendor-neutral, y
+versionada** (`/api/v1/*`), el **MCP server** la traduce a comandos detrás de cinco herramientas vendor-neutral, y
 este **plugin** es el plano de control para agentes. A medida que partes del monolito se
-extraigan a servicios, el contrato hacia los agentes (las herramientas MCP) puede
+extraigan a servicios, el contrato hacia los agentes (los comandos MCP) puede
 permanecer estable mientras el backend evoluciona detrás. **No** migra nada todavía: monta
 la costura.

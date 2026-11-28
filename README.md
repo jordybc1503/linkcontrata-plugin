@@ -43,9 +43,11 @@ https://linkcontrata.lat/mcp
 - **Claude Code:** `claude mcp add --transport http linkcontrata https://linkcontrata.lat/mcp`
 - **ChatGPT and other MCP clients:** add a remote MCP server with the URL.
 
-Supported assistants also show interactive screens (MCP Apps) for opportunities, regulations,
-your dashboard and projects, and can run multi-step queries with code mode (`search_api` +
-`execute`).
+The server exposes five tools and every LinkContrata operation is a **command** behind them:
+`list_commands` (index) and `describe_command` (schema), `batch` to read (one or several commands
+at once), `show_command` to show a result on an interactive screen (MCP Apps: opportunities,
+regulations, your dashboard, a project) and `execute` for one change (create, publish, bid,
+advance a flow) — the assistant confirms each change with you first.
 
 Full step-by-step guide (Spanish): https://linkcontrata.lat/ayuda/asistente-ia-mcp-y-api
 

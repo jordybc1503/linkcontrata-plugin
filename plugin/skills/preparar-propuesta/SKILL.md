@@ -2,7 +2,7 @@
 name: preparar-propuesta
 description: Prepare the proposal for a PUBLIC Peruvian procurement process (OECE/SEACE) — requirements checklist from the Bases, eligibility check against the regulations, and draft quotation and annexes; the user then submits it in SEACE. Use it when the user asks to prepare, draft or review a proposal/quotation/offer for a public process (a code like CM-123-2026-…, a LinkContrata URL or an id). · Prepara la propuesta para un proceso PÚBLICO del Estado peruano (OECE/SEACE): checklist de requisitos sacado de las Bases, revisión de elegibilidad con la normativa y borrador de cotización y anexos; el usuario la presenta luego en el SEACE. Úsala cuando pida preparar, redactar o revisar una propuesta, cotización u oferta para un proceso público (un código como CM-123-2026-…, una URL de LinkContrata o un id).
 argument-hint: "[id, código o URL del proceso público]"
-allowed-tools: mcp__plugin_linkcontrata_linkcontrata__get_public_opportunity, mcp__plugin_linkcontrata_linkcontrata__list_opportunities, mcp__plugin_linkcontrata_linkcontrata__whoami, mcp__plugin_linkcontrata_linkcontrata__search_regulations, mcp__plugin_linkcontrata_linkcontrata__get_regulatory_document
+allowed-tools: mcp__plugin_linkcontrata_linkcontrata__list_commands, mcp__plugin_linkcontrata_linkcontrata__describe_command, mcp__plugin_linkcontrata_linkcontrata__batch, mcp__plugin_linkcontrata_linkcontrata__show_command
 ---
 
 # Preparar propuesta para un proceso público (OECE/SEACE)
@@ -15,6 +15,10 @@ de LinkContrata; para esas no uses esta skill.)
 
 Si el usuario tiene (o quiere) un flujo con IA para esta oportunidad, usa la skill `trabajar-flujo` (`start_flow` para
 abrirlo): cada paso queda registrado con su informe y sus fuentes, y las decisiones las toma la empresa en la web.
+
+Esta skill solo lee: todos los comandos que usa (`list_opportunities`, `get_public_opportunity`, `whoami`,
+`search_regulations`, `get_regulatory_document`) van por `batch`, y puedes juntar varios en una llamada (p. ej. la
+ficha y `whoami`). Si no conoces los argumentos de un comando, pídelos con `describe_command`.
 
 ## Flujo
 
