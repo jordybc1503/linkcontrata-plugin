@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "linkcontrata",
   "displayName": "LinkContrata — Platform control / Control de plataforma",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Control LinkContrata from your AI assistant: search Peruvian procurement regulations, review opportunities and projects, create and promote them — signing in with your own LinkContrata account (no token to paste). · Controla LinkContrata desde tu asistente de IA: normativa, oportunidades y proyectos — iniciando sesión con tu cuenta de LinkContrata (sin tokens).",
   "author": {
     "name": "LinkContrata",

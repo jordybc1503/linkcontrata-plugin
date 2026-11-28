@@ -17,8 +17,13 @@ LinkContrata's remote MCP server, `https://linkcontrata.lat/mcp`.
 
 Then run `/mcp`, pick **linkcontrata** → **Authenticate**, sign in with your LinkContrata
 account in the browser and press **Autorizar** (read-only or read & write). Ask in natural
-language: *"busca normas sobre plazos de apelación de la buena pro"* or *"promueve mi
-proyecto 12 al marketplace"*.
+language: *"busca normas sobre plazos de apelación de la buena pro"*, *"promueve mi
+proyecto 12 al marketplace"* or *"prepara mi oferta para CM-658-2026-SERVIR"* (`/linkcontrata:preparar-oferta`).
+
+**Preparing offers:** for a public OECE/SEACE process the plugin reads the Bases and gives you the requirements,
+an eligibility check against the regulations and draft quotation/letter/declarations — **you present it in the
+SEACE**; for a private opportunity published in LinkContrata it helps you price it and sends it there with your
+confirmation.
 
 Already installed? Update with `/plugin marketplace update linkcontrata` and reinstall.
 

@@ -11,7 +11,7 @@
     {
       "name": "linkcontrata",
       "source": "./plugin",
-      "description": "Control LinkContrata from your assistant: regulations, opportunities and projects — signing in with your LinkContrata account (no token). · Controla LinkContrata desde tu asistente: normativa, oportunidades y proyectos — iniciando sesión con tu cuenta de LinkContrata (sin tokens).",
+      "description": "Control LinkContrata from your assistant: regulations, opportunities, projects and offer preparation (public → presented in the SEACE, private → sent in LinkContrata) — signing in with your LinkContrata account (no token). · Controla LinkContrata desde tu asistente: normativa, oportunidades, proyectos y preparación de ofertas (públicas → se presentan en el SEACE, privadas → se envían en LinkContrata) — iniciando sesión con tu cuenta (sin tokens).",
       "keywords": [
         "contrataciones",
         "procurement",
@@ -22,7 +22,7 @@
         "regulatorio",
         "regulatory"
       ],
-      "version": "0.3.1"
+      "version": "0.4.0"
     }
   ]
 }
