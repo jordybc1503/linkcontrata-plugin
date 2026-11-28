@@ -24,8 +24,8 @@ ChatGPT / other ── MCP connector ────────┤
 | Component | Files | Purpose |
 |---|---|---|
 | **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): `mcp__plugin_linkcontrata_linkcontrata__*` tools (read + write), code mode (`search_api` + `execute`) and MCP Apps screens. |
-| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `autenticacion`. |
-| **Commands** | `commands/*.md` | Shortcuts: `/linkcontrata:estado`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
+| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `preparar-propuesta` (public offers), `postular-oportunidad-privada` (private offers), `autenticacion`. |
+| **Commands** | `commands/*.md` | Shortcuts: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agents** | `agents/*.md` | `operador-linkcontrata` (management, read+write) and `analista-regulatorio` (read-only). |
 | **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Audit (PostToolUse logs usage) and session context (SessionStart). |
 
@@ -51,6 +51,19 @@ for the award"* or *"promote my project 12 to the marketplace"*.
 
 > Without the plugin: `claude mcp add --transport http linkcontrata https://linkcontrata.lat/mcp`. The npm
 > package `@linkcontrata/mcp` (stdio + `LINKCONTRATA_TOKEN`) is deprecated in favour of this remote server.
+
+## Preparing offers
+
+`/linkcontrata:preparar-oferta <code, id or URL>` (or just *"prepare my offer for CM-658-2026-SERVIR"*):
+
+- **Public process (OECE/SEACE)** → skill `preparar-propuesta`: reads the process with `get_public_opportunity`
+  (timeline, items, documents and the Bases text), gives the **requirements checklist** from the Bases, checks
+  **eligibility** against the regulations (RNP, impediments), drafts the **quotation, cover letter and sworn
+  declarations** with your company data (unknowns as `[completar]`) and a final checklist. **You present it in the
+  SEACE** — LinkContrata does not submit public offers.
+- **Private opportunity (published by a company in LinkContrata)** → skill `postular-oportunidad-privada`: what
+  is asked, prices per item and a cover note; you create the draft with **Postular** on the web and the assistant
+  sends it with `submit_bid` only after your explicit confirmation.
 
 ## Marketplace: two different things
 
@@ -87,8 +100,8 @@ que también funciona con otros asistentes compatibles con MCP (p. ej. ChatGPT v
 | Componente | Archivos | Para qué |
 |---|---|---|
 | **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): herramientas `mcp__plugin_linkcontrata_linkcontrata__*` (lectura + escritura), code mode (`search_api` + `execute`) y pantallas MCP Apps. |
-| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `autenticacion`. |
-| **Comandos** | `commands/*.md` | Atajos: `/linkcontrata:estado`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
+| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `preparar-propuesta` (ofertas públicas), `postular-oportunidad-privada` (ofertas privadas), `autenticacion`. |
+| **Comandos** | `commands/*.md` | Atajos: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agentes** | `agents/*.md` | `operador-linkcontrata` (gestión, lectura+escritura) y `analista-regulatorio` (solo lectura). |
 | **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Auditoría (PostToolUse registra el uso) y contexto de sesión (SessionStart). |
 
@@ -114,6 +127,19 @@ buena pro"* o *"promueve mi proyecto 12 al marketplace"*.
 
 > Sin el plugin: `claude mcp add --transport http linkcontrata https://linkcontrata.lat/mcp`. El paquete npm
 > `@linkcontrata/mcp` (stdio + `LINKCONTRATA_TOKEN`) queda obsoleto en favor de este servidor remoto.
+
+### Preparar ofertas
+
+`/linkcontrata:preparar-oferta <código, id o URL>` (o simplemente *«prepara mi oferta para CM-658-2026-SERVIR»*):
+
+- **Proceso público (OECE/SEACE)** → skill `preparar-propuesta`: lee el proceso con `get_public_opportunity`
+  (cronograma, ítems, documentos y el texto de las Bases), te da la **lista de requisitos** de las Bases, revisa la
+  **elegibilidad** con la normativa (RNP, impedimentos), redacta la **cotización, la carta de presentación y las
+  declaraciones juradas** con los datos de tu empresa (lo desconocido va como `[completar]`) y un checklist final.
+  **La presentas tú en el SEACE**: LinkContrata no envía ofertas públicas.
+- **Oportunidad privada (publicada por una empresa en LinkContrata)** → skill `postular-oportunidad-privada`: qué
+  pide, precios por ítem y nota de presentación; creas el borrador con **Postular** en la web y el asistente la
+  envía con `submit_bid` solo con tu confirmación explícita.
 
 ### Marketplace: dos cosas distintas
 
