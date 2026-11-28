@@ -1,6 +1,6 @@
 ---
 name: trabajar-flujo
-description: Work an AI flow (Flujos con IA) in LinkContrata — do the AI's current step following its instruction, report it with sources, keep going through the AI steps and stop when it is the company's turn. Use it when the user says "trabaja el flujo 14", "work flow 14", "sigue con mi flujo", or wants an offer/publication worked step by step with a record. · Trabaja un flujo con IA de LinkContrata: hace el paso actual de la IA según su instrucción, lo reporta con fuentes, sigue con los pasos de la IA y se detiene cuando le toca a la empresa. Úsala cuando el usuario diga «trabaja el flujo 14», «sigue con mi flujo» o quiera trabajar una oferta o una publicación paso a paso dejando registro.
+description: Work an AI flow (Flujos con IA) in LinkContrata — do the AI's current step following its instruction, report it with sources, keep going through the AI steps and stop when it is the company's turn. Use it when the user says "trabaja el flujo 14", "work flow 14", "sigue con mi flujo", or wants an offer/publication worked step by step with a record. · Trabaja un flujo con IA de LinkContrata — hace el paso actual de la IA según su instrucción, lo reporta con fuentes, sigue con los pasos de la IA y se detiene cuando le toca a la empresa. Úsala cuando el usuario diga «trabaja el flujo 14», «sigue con mi flujo» o quiera trabajar una oferta o una publicación paso a paso dejando registro.
 argument-hint: "[id del flujo]"
 allowed-tools: mcp__plugin_linkcontrata_linkcontrata__list_commands, mcp__plugin_linkcontrata_linkcontrata__describe_command, mcp__plugin_linkcontrata_linkcontrata__batch, mcp__plugin_linkcontrata_linkcontrata__show_command, mcp__plugin_linkcontrata_linkcontrata__execute
 ---
@@ -8,14 +8,16 @@ allowed-tools: mcp__plugin_linkcontrata_linkcontrata__list_commands, mcp__plugin
 # Trabajar un flujo con IA
 
 Un **flujo** es un trabajo con pasos fijos. Los pasos de la **IA** los haces tú; los de la **empresa** (confirmar,
-postular o no, aprobar, marcar enviado o publicado, adjudicar) los decide una persona en la web. LinkContrata impone
-el orden y rechaza que un token decida, responda o cancele: no hay comando para eso, a propósito. Lo que el
-servidor **no** impide es que uses los comandos del marketplace por fuera del flujo; eso lo prohíbe esta skill
-(ver Reglas).
+postular o no, aprobar, marcar enviado o publicado, adjudicar) los decide el usuario: **se lo preguntas en el chat** y,
+con su respuesta, los haces con `decide_flow_step` (o `cancel_flow`) enviando lo que dijo en `user_confirmation`.
+LinkContrata impone el orden, rechaza una decisión sin esa confirmación y deja en el historial quién decidió, qué dijo
+y que fue por el asistente. Lo que el servidor **no** impide es que uses los comandos del marketplace por fuera del
+flujo; eso lo prohíbe esta skill (ver Reglas).
 
 Todo se hace con comandos de LinkContrata: las lecturas (`get_flow`, `list_flows`, `list_my_opportunities`,
 `get_public_opportunity`, `search_regulations`…) van por `batch`, y puedes juntar varias en una llamada; lo que
-escribe (`start_flow`, `submit_flow_step`, `ask_company`, `create_opportunity`) va por `execute`, de uno en uno. Si un
+escribe (`start_flow`, `submit_flow_step`, `ask_company`, `decide_flow_step`, `cancel_flow`, `create_opportunity`)
+va por `execute`, de uno en uno. Si un
 paso nombra un comando que no has usado, pide su esquema con `describe_command`.
 
 ## Bucle
@@ -24,9 +26,13 @@ paso nombra un comando que no has usado, pide su esquema con `describe_command`.
    cuál. Mira `current_position`, el paso actual (`steps[current_position - 1]`), la `revision` y los últimos
    `events`.
 2. **Si el flujo está cerrado** (`done` / `cancelled`) dilo y termina. **Si está `blocked`** (hay una pregunta sin
-   responder) di que espera la respuesta de la empresa en la web y termina.
-3. **Si el paso actual es de la empresa** (`actor: "company"`): detente. Resume lo hecho y di qué tiene que decidir y
-   dónde: `https://linkcontrata.lat/flujos/<id>`. No intentes saltártelo.
+   responder): muéstrale al usuario la pregunta (y sus opciones) y, cuando conteste, ejecuta `decide_flow_step` con
+   `decision: "answer"`, su `answer` y lo que dijo en `user_confirmation`. Si no quiere contestar ahora, termina.
+3. **Si el paso actual es de la empresa** (`actor: "company"`): resume lo hecho y pregúntale qué decide, con las
+   opciones del paso (`steps[].decisions`) explicadas en lenguaje simple. **Nunca decidas sin preguntar** ni infieras
+   el sí de una respuesta ambigua. Con su respuesta, ejecuta `decide_flow_step` (`position`, `revision`, `decision`,
+   `note` si el paso la pide, `chosen` en «pick», y su frase en `user_confirmation`) y sigue el bucle. También puede
+   decidir en la web: `https://linkcontrata.lat/flujos/<id>`.
 4. **Si el paso actual es de la IA** (`actor: "ai"`): haz lo que dice su `instruction` con los comandos que nombra,
    leyendo antes los informes de los pasos anteriores y el historial (`events`): respuestas a tus preguntas y, si el
    paso fue devuelto (`sent_back`), la nota de qué corregir. Para una oportunidad privada usa el campo `opportunity`
@@ -37,25 +43,30 @@ paso nombra un comando que no has usado, pide su esquema con `describe_command`.
    - `report`: 40 a 8 000 caracteres, en Markdown;
    - `sources`: lista de `{label, url?}` — `url` es opcional (una ficha o un dato que te dio la empresa puede ir solo
      con etiqueta); obligatorias (al menos una) si el paso tiene `needs_sources`;
-   - `data` si el paso lo pide: en `shortlist`, `data.candidates` es una **lista** de 1 a 20 objetos
-     `{public_opportunity_id, reason}` (ids distintos, el id que usa `get_public_opportunity`); en `prepare`,
-     `data.opportunity_id`.
+   - `data` si el paso lo pide: en `shortlist`, `data.candidates` es una **lista** de 0 a 20 objetos
+     `{public_opportunity_id, reason}` (ids distintos, el id que usa `get_public_opportunity`). Si ningún proceso
+     encaja, **no fuerces candidatos**: envía `data.candidates: []` y deja en el informe los filtros que usaste (y si
+     ampliaste la búsqueda), los descartados con su motivo y los procesos que quedan por verificar; la empresa cerrará
+     el radar sin elegir. En `prepare`, `data.opportunity_id`.
+   - En el radar, el perfil de la empresa sale de `get_company_procurement_profile` (y del Cerebro, `search_brain`),
+     además del `brief`; el plazo real de cada proceso, de sus `etapas` (ver la skill `buscar-oportunidades`).
 6. **Vuelve al paso 1** con el flujo que devolvió el reporte, hasta llegar a un paso de la empresa o al final.
 
 ## Reglas
 
 - **Pregunta en vez de adivinar.** Ante cualquier ambigüedad o dato que no tengas (precios, metrados, plazos
-  ofrecidos), ejecuta `ask_company` con `execute` (`question` y, si sirve, hasta 6 `options`) y detente: el flujo queda «Te toca a ti»
-  hasta que una persona responda en la web.
+  ofrecidos), pregúntaselo al usuario en el chat. Si quieres dejar la pregunta registrada en el flujo, ejecuta
+  `ask_company` (`question` y, si sirve, hasta 6 `options`): queda «Te toca a ti» hasta que el usuario responda, en el
+  chat (tú lo registras con `decide_flow_step`, `decision: "answer"`) o en la web.
 - **Datos de la empresa:** `whoami` trae su identidad (razón social, RUC), no su inscripción en el RNP, su capítulo,
   su experiencia facturada ni sus constancias. Para elegibilidad y requisitos pídelos con `ask_company`; nunca los
   supongas.
 - **Nunca inventes datos** (montos, RUC, experiencia, artículos de normas). Cita la fuente de cada dato.
-- **Mientras trabajas un flujo no hagas ninguna acción del marketplace que le toque a una persona**: no ejecutes
-  `submit_bid` (enviar o presentar una postulación), `publish_opportunity` (publicar una oportunidad) ni
-  `promote_project_to_marketplace` (promover un proyecto al marketplace) con `execute`, ni la publiques por ningún otro
-  camino. El servidor no te lo impide; lo hace una persona en la web («Postular», «Publicar») y después lo marca en
-  el flujo. Una oferta a un proceso público se presenta en el SEACE, no en LinkContrata.
+- **Enviar, publicar o promover solo con confirmación explícita**: `submit_bid` (enviar una postulación),
+  `publish_opportunity` (publicar una oportunidad) y `promote_project_to_marketplace` los ejecutas con `execute` solo
+  después de mostrarle al usuario qué se va a enviar o publicar y que diga que sí; luego marca el paso del flujo con
+  `decide_flow_step` (`done`) con su frase. Una oferta a un proceso público se presenta en el SEACE, no en LinkContrata:
+  prepárala y guíalo paso a paso.
 - **Paso `prepare`: un solo borrador por flujo.** Antes de crear nada, busca si ya existe uno:
   1. en `get_flow`: el campo `opportunity`; en los `events` de tipo `report`, `body.data.opportunity_id`; en los de
      tipo `sent_back`, `body.cleared.opportunity_id` (o la entrada del paso `prepare` en `body.reset`);
@@ -72,7 +83,7 @@ paso nombra un comando que no has usado, pide su esquema con `describe_command`.
   Vuelve a leer `get_flow` y mira los últimos `events`: si alguien devolvió el paso (`sent_back`, aunque sea la misma
   posición), lo reportó desde la web o respondió una pregunta, lee la nota o la respuesta, rehaz lo que cambió y solo
   entonces reporta con la `revision` vigente. Si el paso actual ya es otro, empieza el bucle de nuevo. Si la API dice
-  que el paso lo decide la empresa, detente como en el paso 3.
+  que el paso lo decide la empresa, sigue el paso 3 (pregúntale al usuario).
 - Para abrir un flujo nuevo ejecuta `start_flow` con `execute` (confirma antes con el usuario); si ya hay uno abierto para esa
   oportunidad la API lo dice: búscalo con `list_flows` (`state: "open"`) y trabaja ese.
 - Reportar y preguntar necesitan el conector con permiso de **lectura y escritura**; si falla por permisos, ve la

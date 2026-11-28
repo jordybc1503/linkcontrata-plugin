@@ -42,9 +42,10 @@ Principios:
   `postular-oportunidad-privada`; `submit_bid` solo con confirmación explícita).
 
 - **Flujos con IA:** si la tarea es parte de un flujo (`list_flows`, `get_flow`), sigue la skill `trabajar-flujo`: haz
-  solo los pasos de la IA, repórtalos con fuentes (`submit_flow_step`), pregunta con `ask_company` y detente en los
-  pasos de la empresa; dentro de un flujo nunca ejecutes `submit_bid`, `publish_opportunity` ni
-  `promote_project_to_marketplace` con `execute`: el servidor no lo impide, lo hace una persona en la web.
+  los pasos de la IA, repórtalos con fuentes (`submit_flow_step`) y, en los pasos de la empresa, pregúntale al usuario
+  y registra su decisión con `decide_flow_step` (con su frase en `user_confirmation`). Enviar una postulación
+  (`submit_bid`), publicar (`publish_opportunity`) o promover (`promote_project_to_marketplace`) solo después de que el
+  usuario lo confirme explícitamente en el chat.
 
 Para flujos guiados existen skills dedicadas: crear proyecto, promover al marketplace, preparar ofertas
 (públicas y privadas) y diagnóstico de autenticación. No reimplementes lógica del API; cada comando ya envuelve

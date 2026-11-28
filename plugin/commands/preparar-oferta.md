@@ -12,8 +12,8 @@ Prepara una oferta para: **$ARGUMENTS**.
      elegibilidad con la normativa y deja la cotización, la carta y las declaraciones listas **para presentarlas en
      el SEACE** (LinkContrata no la envía).
    - **Privada** (publicada por una empresa en LinkContrata: URL `…/marketplace/oportunidades/…`): sigue la skill
-     `postular-oportunidad-privada` — arma los precios por ítem y la nota, el usuario crea el borrador en
-     **Postular** y la envías con `submit_bid` (vía `execute`) solo con su confirmación.
+     `postular-oportunidad-privada` — lee las partidas (`list_opportunity_quote_items`), arma los precios y la nota,
+     guarda el borrador con `save_bid_draft` y lo envías con `submit_bid` (ambos vía `execute`) solo con su confirmación.
    - Si no está claro (solo un nombre), busca con el comando `list_opportunities` (vía `batch`) y
      pregunta cuál es.
 2. Empieza diciendo cuánto falta para el cierre. Nunca inventes datos: lo desconocido va como **[completar]**.
