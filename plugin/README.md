@@ -24,7 +24,7 @@ ChatGPT / other ── MCP connector ────────┤
 | Component | Files | Purpose |
 |---|---|---|
 | **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): five tools — `list_commands`, `describe_command`, `batch` (reads), `show_command` (MCP Apps screens) and `execute` (writes) — that run every LinkContrata operation as a **command**. |
-| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `preparar-propuesta` (public offers), `postular-oportunidad-privada` (private offers), `trabajar-flujo` (AI flows), `armar-cerebro` (company Cerebro), `autenticacion`. |
+| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `buscar-oportunidades` (shortlist of opportunities that fit), `preparar-propuesta` (public offers), `postular-oportunidad-privada` (private offers), `trabajar-flujo` (AI flows), `armar-cerebro` (company Cerebro), `autenticacion`. |
 | **Commands** | `commands/*.md` | Shortcuts: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:trabajar-flujo`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agents** | `agents/*.md` | `operador-linkcontrata` (management, read+write) and `analista-regulatorio` (read-only). |
 | **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Audit (PostToolUse logs usage) and session context (SessionStart). |
@@ -62,8 +62,8 @@ for the award"* or *"promote my project 12 to the marketplace"*.
   declarations** with your company data (unknowns as `[completar]`) and a final checklist. **You present it in the
   SEACE** — LinkContrata does not submit public offers.
 - **Private opportunity (published by a company in LinkContrata)** → skill `postular-oportunidad-privada`: what
-  is asked, prices per item and a cover note; you create the draft with **Postular** on the web and the assistant
-  sends it with `submit_bid` only after your explicit confirmation.
+  reads the items to quote (`list_opportunity_quote_items`), proposes prices per item and a cover note, saves the
+  draft with `save_bid_draft` and sends it with `submit_bid` only after your explicit confirmation.
 
 ## AI flows (Flujos con IA)
 
@@ -112,7 +112,7 @@ que también funciona con otros asistentes compatibles con MCP (p. ej. ChatGPT v
 | Componente | Archivos | Para qué |
 |---|---|---|
 | **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): cinco herramientas — `list_commands`, `describe_command`, `batch` (lecturas), `show_command` (pantallas MCP Apps) y `execute` (escrituras) — que ejecutan cada operación de LinkContrata como un **comando**. |
-| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `preparar-propuesta` (ofertas públicas), `postular-oportunidad-privada` (ofertas privadas), `trabajar-flujo` (flujos con IA), `armar-cerebro` (Cerebro de la empresa), `autenticacion`. |
+| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `buscar-oportunidades` (lista corta de oportunidades que encajan), `preparar-propuesta` (ofertas públicas), `postular-oportunidad-privada` (ofertas privadas), `trabajar-flujo` (flujos con IA), `armar-cerebro` (Cerebro de la empresa), `autenticacion`. |
 | **Comandos** | `commands/*.md` | Atajos: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:trabajar-flujo`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agentes** | `agents/*.md` | `operador-linkcontrata` (gestión, lectura+escritura) y `analista-regulatorio` (solo lectura). |
 | **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Auditoría (PostToolUse registra el uso) y contexto de sesión (SessionStart). |
@@ -150,20 +150,19 @@ buena pro"* o *"promueve mi proyecto 12 al marketplace"*.
   declaraciones juradas** con los datos de tu empresa (lo desconocido va como `[completar]`) y un checklist final.
   **La presentas tú en el SEACE**: LinkContrata no envía ofertas públicas.
 - **Oportunidad privada (publicada por una empresa en LinkContrata)** → skill `postular-oportunidad-privada`: qué
-  pide, precios por ítem y nota de presentación; creas el borrador con **Postular** en la web y el asistente la
-  envía con `submit_bid` solo con tu confirmación explícita.
+  lee las partidas a cotizar (`list_opportunity_quote_items`), te propone precios por partida y la nota de
+  presentación, guarda el borrador con `save_bid_draft` y la envía con `submit_bid` solo con tu confirmación explícita.
 
 ### Flujos con IA
 
 Un **flujo** es un trabajo de la empresa con pasos fijos (buscar oportunidades, oferta a un proceso público, oferta a
 una oportunidad privada, publicar una oportunidad). La IA hace sus pasos y deja un informe con fuentes; una persona
-decide los pasos de la empresa en la web (postular o no, aprobar, marcar enviado o publicado, adjudicar). Di
+decide los pasos de la empresa (postular o no, aprobar, marcar enviado o publicado, adjudicar), en la web o en el chat. Di
 *«Trabaja el flujo 14»* o usa `/linkcontrata:trabajar-flujo 14`: la skill `trabajar-flujo` lee el flujo (`get_flow`),
 hace el paso actual de la IA, lo reporta (`submit_flow_step`), pregunta a la empresa si algo no está claro
-(`ask_company`) y se detiene cuando le toca a la empresa. Ningún comando puede decidir un paso de la empresa (el
-servidor lo rechaza desde un token). El servidor no impide usar los comandos del marketplace (enviar una postulación,
-publicar o promover una oportunidad) por fuera del flujo; la skill le indica al asistente que no lo haga mientras
-trabaja uno: eso lo hace una persona en la web. Guía: https://linkcontrata.lat/ayuda/flujos-con-ia
+(`ask_company`) y, cuando le toca a la empresa, te pregunta y registra tu decisión con `decide_flow_step` (el servidor
+exige tu confirmación en `user_confirmation` y la guarda en el historial). Enviar una postulación, publicar o promover
+una oportunidad también se hace desde el chat, solo después de que lo confirmes. Guía: https://linkcontrata.lat/ayuda/flujos-con-ia
 
 ### Marketplace: dos cosas distintas
 

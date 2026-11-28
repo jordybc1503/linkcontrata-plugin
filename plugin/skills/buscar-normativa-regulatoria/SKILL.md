@@ -14,8 +14,10 @@ que se lee con `batch` (`mcp__plugin_linkcontrata_linkcontrata__batch`). Lectura
 
 1. **Formula la consulta** en lenguaje natural y específica, p. ej. *"plazos para apelar una
    buena pro"* o *"causales de nulidad de oficio en contrataciones"*. Pasa el texto del
-   usuario como `query`. Ajusta `top_k` (máx. resultados) y `min_similarity` (umbral 0–1)
-   solo si hace falta acotar. Si el usuario quiere ver los resultados en pantalla, usa
+   usuario como `query`. Acota con `source`, `year`, `document_type`, `published_from` y
+   `published_to` (AAAA-MM-DD) cuando el usuario hable de un tipo de norma, una entidad o un
+   periodo (los valores salen de `list_regulatory_documents`). `top_k` va de 1 a 20; con
+   `min_similarity` (umbral 0–1) la respuesta se arma solo con los fragmentos que lo pasan. Si el usuario quiere ver los resultados en pantalla, usa
    `show_command` con el mismo comando y argumentos.
 2. **Lee los fragmentos** devueltos: cada uno trae el documento de origen. Para el texto
    completo de una norma, lee `get_regulatory_document` con su id; para navegar/filtrar el
