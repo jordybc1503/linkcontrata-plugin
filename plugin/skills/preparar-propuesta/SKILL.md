@@ -11,6 +11,11 @@ allowed-tools: mcp__plugin_linkcontrata_linkcontrata__get_public_opportunity, mc
 envía:** esta skill deja todo listo para que el usuario la presente. (Las oportunidades **privadas** se postulan dentro
 de LinkContrata; para esas no uses esta skill.)
 
+## Si hay un flujo con IA
+
+Si el usuario tiene (o quiere) un flujo con IA para esta oportunidad, usa la skill `trabajar-flujo` (`start_flow` para
+abrirlo): cada paso queda registrado con su informe y sus fuentes, y las decisiones las toma la empresa en la web.
+
 ## Flujo
 
 1. **Identifica el proceso.**
