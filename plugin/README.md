@@ -24,7 +24,7 @@ ChatGPT / other ── MCP connector ────────┤
 | Component | Files | Purpose |
 |---|---|---|
 | **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | The remote server `https://linkcontrata.lat/mcp` (sign-in with LinkContrata): five tools — `list_commands`, `describe_command`, `batch` (reads), `show_command` (MCP Apps screens) and `execute` (writes) — that run every LinkContrata operation as a **command**. |
-| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `buscar-oportunidades` (shortlist of opportunities that fit), `preparar-propuesta` (public offers), `postular-oportunidad-privada` (private offers), `trabajar-flujo` (AI flows), `armar-cerebro` (company Cerebro), `autenticacion`. |
+| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `buscar-oportunidades` (shortlist of opportunities that fit), `preparar-propuesta` (public offers), `postular-oportunidad-privada` (private offers), `trabajar-flujo` (AI flows), `armar-cerebro` (company Cerebro), `alertas-oportunidades` (daily opportunity alerts), `autenticacion`. |
 | **Commands** | `commands/*.md` | Shortcuts: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:trabajar-flujo`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agents** | `agents/*.md` | `operador-linkcontrata` (management, read+write) and `analista-regulatorio` (read-only). |
 | **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Audit (PostToolUse logs usage) and session context (SessionStart). |
@@ -112,7 +112,7 @@ que también funciona con otros asistentes compatibles con MCP (p. ej. ChatGPT v
 | Componente | Archivos | Para qué |
 |---|---|---|
 | **MCP server** | `.claude-plugin/plugin.json` → `mcpServers` | El servidor remoto `https://linkcontrata.lat/mcp` (inicio de sesión con LinkContrata): cinco herramientas — `list_commands`, `describe_command`, `batch` (lecturas), `show_command` (pantallas MCP Apps) y `execute` (escrituras) — que ejecutan cada operación de LinkContrata como un **comando**. |
-| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `buscar-oportunidades` (lista corta de oportunidades que encajan), `preparar-propuesta` (ofertas públicas), `postular-oportunidad-privada` (ofertas privadas), `trabajar-flujo` (flujos con IA), `armar-cerebro` (Cerebro de la empresa), `autenticacion`. |
+| **Skills** | `skills/*/SKILL.md` | Workflows: `crear-proyecto`, `promover-proyecto-al-marketplace`, `buscar-normativa-regulatoria`, `buscar-oportunidades` (lista corta de oportunidades que encajan), `preparar-propuesta` (ofertas públicas), `postular-oportunidad-privada` (ofertas privadas), `trabajar-flujo` (flujos con IA), `armar-cerebro` (Cerebro de la empresa), `alertas-oportunidades` (alertas diarias de oportunidades), `autenticacion`. |
 | **Comandos** | `commands/*.md` | Atajos: `/linkcontrata:estado`, `/linkcontrata:preparar-oferta`, `/linkcontrata:trabajar-flujo`, `/linkcontrata:crear-proyecto`, `/linkcontrata:promover-al-marketplace`, `/linkcontrata:buscar-normativa`. |
 | **Agentes** | `agents/*.md` | `operador-linkcontrata` (gestión, lectura+escritura) y `analista-regulatorio` (solo lectura). |
 | **Hooks** | `hooks/hooks.json` + `hooks/*.sh` | Auditoría (PostToolUse registra el uso) y contexto de sesión (SessionStart). |
