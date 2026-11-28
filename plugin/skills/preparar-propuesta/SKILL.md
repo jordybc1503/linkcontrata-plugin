@@ -28,7 +28,10 @@ ficha y `whoami`). Si no conoces los argumentos de un comando, pídelos con `des
      (`type: "public"`, `query: <código>`, `public_process_status: "all"`: sin él solo salen los que aún admiten
      postulantes), confirma con el usuario si hay más de uno.
    - Lee la ficha con `get_public_opportunity` (`id`): entidad, tipo de proceso, cronograma, ítems, documentos y
-     `source_document.text` (texto extraído de las Bases / términos de referencia).
+     `source_document.text` (texto extraído de las Bases / términos de referencia). Si `source_document.scanned` es
+     `true` y `text` está vacío, las Bases son un PDF escaneado que aún no se leyó con OCR: dilo, no inventes
+     requisitos y usa el PDF (`source_url`) o pídeselos al usuario. Con `extraction_method: "ocr"` el texto viene de OCR:
+     verifica cifras y plazos contra el PDF antes de afirmarlos.
 2. **Avisa el plazo** según `phase` (fechas en hora de Lima):
    - `open`: di hasta cuándo puede postular (`apply_until`) y cuánto falta. Es el fin del «Registro de participantes»
      en el SEACE: la empresa debe **registrarse como participante antes** de esa fecha, y presenta la oferta del

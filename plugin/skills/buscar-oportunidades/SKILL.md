@@ -44,7 +44,7 @@ empresa elija en la web, abre un **radar** con la skill `trabajar-flujo` (`start
      solo para invitados; descártalo.
    - Sin `etapas`: «fechas por confirmar en el SEACE»; no inventes un cierre.
    Para una oportunidad privada, el plazo es su `deadline_at` y se postula dentro de LinkContrata.
-5. **Califica con evidencia.** Contrasta lo que piden (ítems, `source_document.text` de las Bases si está) con el
+5. **Califica con evidencia.** Contrasta lo que piden (ítems, `source_document.text` de las Bases si está; vacío con `scanned: true` = Bases escaneadas aún sin OCR) con el
    Cerebro y el perfil: cita la página del Cerebro (`search_brain`, `get_brain_page`) o el dato del perfil que respalda
    cada punto. Para dudas de elegibilidad (RNP, impedimentos, consorcios, contrataciones menores) usa
    `search_regulations` con filtros si aplican y cita el documento. Lo que no tenga respaldo queda como **por
