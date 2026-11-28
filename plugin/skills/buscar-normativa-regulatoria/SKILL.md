@@ -27,6 +27,14 @@ que se lee con `batch` (`mcp__plugin_linkcontrata_linkcontrata__batch`). Lectura
    el documento (título / id). No inventes artículos ni números: si el corpus no lo cubre,
    dilo y sugiere afinar la consulta.
 
+## La Ley 32069 y su Reglamento
+
+Para el texto de la Ley N° 32069 o de su Reglamento usa `search_norms` (por palabras, sin IA: funciona aunque la
+búsqueda semántica esté caída) y `get_norm_article` (`norma`: `ley-32069` o `reglamento-32069`, `articulo`). Cita
+con la `url` del artículo (el PDF oficial en su página). Si `modificado` es true, el texto vigente de lo modificado es
+la cita de la nota «cuyo texto es el siguiente». Si `search_regulations` responde con `base_norms`, son esos artículos:
+léelos con `get_norm_article` antes de citarlos.
+
 ## Notas
 
 - Es un asistente de **referencia normativa**, no asesoría legal vinculante; cuando la
