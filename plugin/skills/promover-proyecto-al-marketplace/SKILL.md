@@ -2,12 +2,13 @@
 name: promover-proyecto-al-marketplace
 description: Promote a LinkContrata project to the marketplace (turn it into a public opportunity to receive bids) in one step. Use it when the user asks to publish/promote/expose/list a project to the marketplace, or to "find suppliers/contractors" for one of their projects. · Promueve un proyecto de LinkContrata al marketplace (lo convierte en una oportunidad pública para recibir pujas) en un solo paso. Úsala cuando el usuario pida publicar/promocionar/exponer/sacar al marketplace un proyecto, o "buscar proveedores/contratistas" para un proyecto suyo.
 argument-hint: "[id-o-nombre del proyecto]"
-allowed-tools: mcp__plugin_linkcontrata_linkcontrata__whoami, mcp__plugin_linkcontrata_linkcontrata__list_projects, mcp__plugin_linkcontrata_linkcontrata__get_project, mcp__plugin_linkcontrata_linkcontrata__promote_project_to_marketplace, mcp__plugin_linkcontrata_linkcontrata__get_opportunity
+allowed-tools: mcp__plugin_linkcontrata_linkcontrata__list_commands, mcp__plugin_linkcontrata_linkcontrata__describe_command, mcp__plugin_linkcontrata_linkcontrata__batch, mcp__plugin_linkcontrata_linkcontrata__show_command, mcp__plugin_linkcontrata_linkcontrata__execute
 ---
 
 # Promover un proyecto al marketplace
 
-Operación de **un solo paso** respaldada por `mcp__plugin_linkcontrata_linkcontrata__promote_project_to_marketplace`:
+Operación de **un solo paso** respaldada por el comando `promote_project_to_marketplace`, que se
+ejecuta con `execute` (`mcp__plugin_linkcontrata_linkcontrata__execute`):
 crea (o reutiliza) el paquete de contratación del proyecto, deriva la oportunidad y la
 **publica** en el marketplace. Es **atómica** e **idempotente** (promover dos veces no
 duplica). Requiere permiso de **lectura y escritura**.
@@ -17,13 +18,14 @@ duplica). Requiere permiso de **lectura y escritura**.
 
 ## Flujo
 
-1. **Identifica el proyecto.** Si el usuario da un id, úsalo. Si da un nombre, usa
-   `list_projects` para encontrar el id; si hay ambigüedad, pregunta cuál.
+1. **Identifica el proyecto.** Si el usuario da un id, úsalo. Si da un nombre, lee
+   `list_projects` con `batch` para encontrar el id; si hay ambigüedad, pregunta cuál. Para el
+   resumen del paso 2 puedes leer el proyecto con `get_project` (o mostrárselo con `show_command`).
 2. **Confirma antes de publicar.** Publicar hace la oportunidad **visible públicamente** y
    puede tener costo de plan. Resume al usuario qué se publicará (título, descripción,
    cierre, presupuesto) y pide OK. Para solo **preparar un borrador** sin publicar, pasa
    `publish: false`.
-3. **Promueve** con `promote_project_to_marketplace`:
+3. **Promueve** con `execute` (`command: "promote_project_to_marketplace"`), con estos `args`:
    - `project_id` (obligatorio).
    - Overrides opcionales (si no, se derivan del proyecto): `title`, `description`,
      `deadline_at` (ISO; default 30 días si publicas sin fecha), `budget_min`/`budget_max`
@@ -46,5 +48,5 @@ duplica). Requiere permiso de **lectura y escritura**.
 
 ## Idempotencia
 
-Si el proyecto ya fue promovido, la herramienta devuelve la **misma** oportunidad (no crea
+Si el proyecto ya fue promovido, el comando devuelve la **misma** oportunidad (no crea
 duplicados). Es seguro reintentar.

@@ -26,12 +26,12 @@ El usuario ve y desconecta sus asistentes en LinkContrata → **Configuración �
 | Síntoma | Causa | Qué decirle al usuario |
 |---|---|---|
 | "No autenticado" / 401 | no hay sesión, expiró o la desconectó | Vuelve a conectar: `/mcp` → linkcontrata → Authenticate. |
-| "Permiso insuficiente: esta conexión es de solo lectura" | autorizó solo lectura | Desconecta en Configuración → Asistentes de IA y vuelve a conectar aceptando lectura y escritura. |
+| "Permiso insuficiente: esta conexión es de solo lectura" (código `WRITE_NOT_ALLOWED`), o `list_commands` no muestra comandos de escritura | autorizó solo lectura | Desconecta en Configuración → Asistentes de IA y vuelve a conectar aceptando lectura y escritura. |
 | "No autorizado." (403) | su rol en la empresa no permite la acción | No es un problema de conexión: un administrador debe cambiar su rol. |
 | "Tu plan no permite esta acción." (402) | el plan no habilita la acción (p. ej. publicar en marketplace) | Debe mejorar el plan, o usar la alternativa en borrador cuando exista. |
 
 ## Verificación rápida
 
-Usa `whoami` (`mcp__plugin_linkcontrata_linkcontrata__whoami`) para confirmar identidad, empresa, plan y capacidades antes de
+Lee el comando `whoami` con `batch` (`mcp__plugin_linkcontrata_linkcontrata__batch`) para confirmar identidad, empresa, plan y capacidades antes de
 operar. Para scripts propios fuera del asistente siguen existiendo los tokens de API (`lct_…`) en
 Configuración → Asistentes de IA → Tokens de API.
